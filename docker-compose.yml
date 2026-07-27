@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: governance_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: governance_gateway
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./gateway:/app
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=sqlite:///./governance.db
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: governance_dashboard
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - web
+    restart: unless-stopped
+
+  simulator:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: governance_simulator
+    command: python scripts/simulate_agents.py
+    volumes:
+      - ./gateway:/app
+      - ./scripts:/app/scripts
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - GATEWAY_URL=http://web:8000
+    depends_on:
+      - web
+    restart: unless-stopped

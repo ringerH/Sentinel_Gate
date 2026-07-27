@@ -1,0 +1,24 @@
+# Dependency directories
+node_modules/
+/frontend/node_modules/
+
+# Python cache and testing
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Local SQLite databases
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+governance.db
+
+# Ignored Hackathon / Agent Metadata
+implementation_plan.md
+task.md
+walkthrough.md
+Pitch_deck.pptx
+~$Pitch_deck.pptx
+~$*.pptx

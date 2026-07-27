@@ -1,0 +1,285 @@
+/* Old-Money Refined Aesthetic Styling for Governance Dashboard */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg-creme: #fdfbf7;
+  --bg-card: #f8f6f0;
+  --text-primary: #212529;
+  --text-secondary: #5f6368;
+  --border-gold: #c5a880;
+  --border-muted: #e2dfd5;
+  --color-allow: #4a6b5d;      /* Sage Green */
+  --color-deny: #8a3324;       /* Deep Burgundy */
+  --color-escalate: #b38600;   /* Muted Amber */
+  --font-serif-header: 'Cinzel', Georgia, serif;
+  --font-serif-body: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--bg-creme);
+  color: var(--text-primary);
+  /* Elegant grainy background texture generated via inline SVG noise */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+.dashboard-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+/* Typography styles */
+h1, h2, h3 {
+  font-family: var(--font-serif-header);
+  letter-spacing: 0.05em;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.sub-header {
+  font-family: var(--font-serif-body);
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-top: -0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px double var(--border-gold);
+  padding-bottom: 1.5rem;
+}
+
+/* Card layout */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-muted);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(140, 120, 83, 0.05);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 6px 20px rgba(140, 120, 83, 0.1);
+}
+
+.card-header-bar {
+  border-bottom: 1px solid var(--border-gold);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Telemetry Widgets Grid */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-value {
+  font-size: 2.2rem;
+  font-family: var(--font-serif-header);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.5rem;
+}
+
+/* Progress bar */
+.progress-container {
+  margin-top: 1rem;
+}
+
+.progress-bar-bg {
+  background-color: var(--border-muted);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-fill {
+  background-color: var(--border-gold);
+  height: 100%;
+  transition: width 0.5s ease-out;
+}
+
+.progress-bar-fill.warning {
+  background-color: var(--color-escalate);
+}
+
+.progress-bar-fill.danger {
+  background-color: var(--color-deny);
+}
+
+/* Emergency Banner */
+.emergency-banner {
+  background-color: var(--color-deny);
+  color: var(--bg-creme);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: var(--font-serif-header);
+  letter-spacing: 0.15em;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.9; }
+  50% { opacity: 0.75; }
+  100% { opacity: 0.9; }
+}
+
+/* Main Split View */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+}
+
+/* Escalations list */
+.escalation-item {
+  border-left: 3px solid var(--border-gold);
+  padding-left: 1rem;
+  margin-bottom: 1.2rem;
+  background-color: #faf9f6;
+  border: 1px solid var(--border-muted);
+  border-left-width: 4px;
+  border-left-color: var(--border-gold);
+  padding: 1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+button {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  font-family: var(--font-serif-header);
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+button.btn-approve {
+  color: var(--color-allow);
+  border-color: var(--color-allow);
+}
+
+button.btn-approve:hover {
+  background-color: var(--color-allow);
+  color: var(--bg-creme);
+}
+
+button.btn-deny {
+  color: var(--color-deny);
+  border-color: var(--color-deny);
+}
+
+button.btn-deny:hover {
+  background-color: var(--color-deny);
+  color: var(--bg-creme);
+}
+
+button.btn-killswitch {
+  color: var(--bg-creme);
+  background-color: var(--color-deny);
+  border-color: var(--color-deny);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+button.btn-killswitch:hover {
+  background-color: #5a190f;
+}
+
+button.btn-killswitch.active {
+  background-color: var(--color-allow);
+  border-color: var(--color-allow);
+}
+
+button.btn-killswitch.active:hover {
+  background-color: #344a40;
+}
+
+/* Badges for Decisions */
+.badge {
+  font-size: 0.75rem;
+  font-family: var(--font-serif-header);
+  font-weight: bold;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+
+.badge.allow {
+  background-color: rgba(74, 107, 93, 0.1);
+  color: var(--color-allow);
+  border: 1px solid var(--color-allow);
+}
+
+.badge.deny {
+  background-color: rgba(138, 51, 36, 0.1);
+  color: var(--color-deny);
+  border: 1px solid var(--color-deny);
+}
+
+.badge.escalate {
+  background-color: rgba(179, 134, 0, 0.1);
+  color: var(--color-escalate);
+  border: 1px solid var(--color-escalate);
+}
+
+/* scrolling logs list */
+.logs-stream {
+  max-height: 550px;
+  overflow-y: auto;
+  border: 1px solid var(--border-muted);
+  background-color: #faf9f6;
+  padding: 1rem;
+}
+
+.log-entry {
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--border-muted);
+  font-size: 0.9rem;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.footer {
+  margin-top: 4rem;
+  text-align: center;
+  font-family: var(--font-serif-header);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--border-gold);
+  border-top: 1px solid var(--border-muted);
+  padding-top: 2rem;
+}
