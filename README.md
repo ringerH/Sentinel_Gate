@@ -1,4 +1,4 @@
-# Financial Agent Governance Layer
+# Financial Agent Governance Layer(Demo)
 
 A security gateway and dashboard designed to authorize, limit, and monitor AI financial agents. This repository implements message signing, deterministic RBAC/ABAC rules, atomic daily budget capping, human-in-the-loop operator approval, and an emergency stop.
 
@@ -10,12 +10,18 @@ The system enforces security and financial boundaries in the following order:
 
 ```mermaid
 graph TD
-    Agent[AI Agent] -->|1. Sign and Send Request| GW[Governance Gateway]
-    GW -->|2. Verify Signature and Freshness| GW
-    GW -->|3. Check RBAC and ABAC Policies| GW
-    GW -->|4. Check and Reserve Spend Limit| GW
-    GW -->|5. Exceeds Threshold? Escalate| DB[Dashboard / Operator]
-    GW -->|6. Logs Decision| Log[SQLite Audit Log]
+    Agent[AI Agent] -->|1. Sign & Send Request| GW[Governance Gateway]
+    GW -->|2. Verify Signature & Freshness| Verify{Valid?}
+    Verify -->|No| Reject[Reject Request]
+    Verify -->|Yes| Policy{3. RBAC & ABAC Policy Check}
+    Policy -->|Denied| Reject
+    Policy -->|Allowed| Spend{4. Check & Reserve Spend Limit}
+    Spend -->|Exceeds Threshold| Escalate[5. Escalate to Dashboard / Operator]
+    Spend -->|Within Threshold| Execute[Execute Action]
+    Escalate -->|Approved| Execute
+    Escalate -->|Denied| Reject
+    Execute --> Log[(6. SQLite Audit Log)]
+    Reject --> Log
 ```
 
 ### Signature Verification Demo
@@ -27,7 +33,7 @@ import hashlib
 import json
 import time
 
-# 1. Agent signs the request
+# Agent signs the request
 def create_signed_request(agent_id: str, action: str, amount: int, secret: str) -> dict:
     payload = {
         "agent_id": agent_id,
@@ -45,7 +51,7 @@ def create_signed_request(agent_id: str, action: str, amount: int, secret: str) 
     ).hexdigest()
     return payload
 
-# 2. Gateway verifies the request
+# Gateway verifies the request
 def verify_signature(payload: dict, secret: str) -> bool:
     sig_to_verify = payload.get("signature")
     data = {k: v for k, v in payload.items() if k != "signature"}
@@ -58,26 +64,8 @@ def verify_signature(payload: dict, secret: str) -> bool:
     return hmac.compare_digest(computed_sig, sig_to_verify)
 ```
 
----
 
-## Submission Clean-up Instructions
-
-Before zipping the project for submission, delete temporary files and cached dependencies to keep the file size minimal:
-
-*   **Exclude/Delete:** `frontend/node_modules/`
-*   **Exclude/Delete:** `gateway/__pycache__/` and `gateway/scripts/__pycache__/`
-*   **Exclude/Delete:** `gateway/.pytest_cache/`
-*   **Exclude/Delete:** `gateway/governance.db` (will auto-generate on startup)
-*   **Exclude/Delete:** `~$Pitch_deck.pptx` (temporary lock file)
-
-### Package Command (Git Archive)
-```bash
-git archive --format=zip HEAD -o financial-governance-submission.zip
-```
-
----
-
-## Stepwise Reproduction & Review Tutorial
+## Run it locally
 
 ### 1. Build and Run
 Start the database, gateway API, simulator, and operator panel:
