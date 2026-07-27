@@ -10,10 +10,10 @@ The system enforces security and financial boundaries in the following order:
 
 ```mermaid
 graph TD
-    Agent[AI Agent] -->|1. Sign & Send Request| GW[Governance Gateway]
-    GW -->|2. Verify Signature & Freshness| GW
-    GW -->|3. Check RBAC & ABAC Policies| GW
-    GW -->|4. Check & Reserve Spend Limit| GW
+    Agent[AI Agent] -->|1. Sign and Send Request| GW[Governance Gateway]
+    GW -->|2. Verify Signature and Freshness| GW
+    GW -->|3. Check RBAC and ABAC Policies| GW
+    GW -->|4. Check and Reserve Spend Limit| GW
     GW -->|5. Exceeds Threshold? Escalate| DB[Dashboard / Operator]
     GW -->|6. Logs Decision| Log[SQLite Audit Log]
 ```
